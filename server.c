@@ -20,22 +20,26 @@ char *READY = "The vending machine is ready to use\n";
 
 
 void *thread_proc(void* arg){
+    
     int temp = *((int*)arg);
     char buffer[1024];
+    
     memset(buffer, 0, sizeof(buffer));
+    char file_path[40] = "salesHistory.txt";
     while (0 == 0)
     {
+        ///////
         int r = recv(temp,buffer,sizeof(buffer),0);
         int machine_number;
-        char* product;
-        memset(product,0,sizeof(char));
+        char* product = (char*) malloc(20*sizeof(char));
+
+        //memset(product,0,sizeof(char));
         int quantity;
         struct tm current_time;
         process_input(buffer,&machine_number,product,&quantity,&current_time);
-        FILE* f;
-        f = fopen("salesHistory.txt","w+");
-        write_to_sales_history(f,machine_number,product,quantity,&current_time);
-        fclose(f);
+        
+        write_to_sales_history(file_path, machine_number,product,quantity,&current_time);
+    
         send(temp,buffer,strlen(buffer),0);
     } 
 }
