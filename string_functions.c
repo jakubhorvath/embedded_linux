@@ -30,10 +30,11 @@ void process_input(char* input, int* machine_num, char* product, int* quantity, 
     }
 }
 
-void write_to_sales_history(FILE* history_file, int machine_num, char* product, int quantity, struct tm* sale_time){
-    
+void write_to_sales_history(char* history_file, int machine_num, char* product, int quantity, struct tm* sale_time){
+    FILE* f = fopen(history_file, "a");
     char time_buffer[26];
     strftime(time_buffer, 26, "%Y-%m-%d %H:%M:%S", sale_time);
 
-    fprintf(history_file, "VM %d %s %d %s\n", machine_num, product, quantity, time_buffer);
+    fprintf(f, "VM %d %s %d %s\n", machine_num, product, quantity, time_buffer);
+    fclose(f);
 }

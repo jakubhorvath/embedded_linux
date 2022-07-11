@@ -17,4 +17,4 @@ void process_input(char *input, int *machine_num, char *product, int *quantity, 
  * quantity - quantity of product obtained from "process_input" function
  * sale_time - time of sale obtained from "process_input" function
  */
-void write_to_sales_history(FILE *history_file, int machine_num, char *product, int quantity, struct tm *sale_time);
+void write_to_sales_history(char* history_file, int machine_num, char* product, int quantity, struct tm* sale_time);
