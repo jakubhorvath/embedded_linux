@@ -1,5 +1,8 @@
 #include "stdio.h"
 
+int check_amount(char* file_path, char* product_name);
+
+
 /*
  * input - the input string obtained from the user
  * machine_num - pointer to int where the machine number will be stored
@@ -8,7 +11,7 @@
  * current_time - pointer to struct tm* where the time of the purchase will be stored
  */
 
-void process_input(char *input, int *machine_num, char *product, int *quantity, struct tm *current_time);
+int process_input(char* input, int* machine_num, char* product, int* quantity, struct tm* current_time, char* error);
 
 /*
  * history_file - pointer to opened output file
