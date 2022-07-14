@@ -17,8 +17,17 @@ pthread_t* tid = NULL;
 int* cfd = NULL;
 int count = 0;
 char *READY = "The vending machine is ready to use\n";
+char *RECV = "The order have been received\n";
 
-
+void *thread_proc_refill(void* arg){
+    while (0 == 0)
+    {
+        //We will handle the refilling function here
+        printf("Refilling...\n");
+        sleep(60);
+    }
+    
+}
 void *thread_proc(void* arg){
     
     int temp = *((int*)arg);
@@ -28,19 +37,16 @@ void *thread_proc(void* arg){
     char file_path[40] = "salesHistory.txt";
     while (0 == 0)
     {
-        ///////
         int r = recv(temp,buffer,sizeof(buffer),0);
         int machine_number;
         char* product = (char*) malloc(20*sizeof(char));
-
-        //memset(product,0,sizeof(char));
+        char* error = (char*) malloc(100*sizeof(char));
         int quantity;
         struct tm current_time;
-        process_input(buffer,&machine_number,product,&quantity,&current_time);
+        process_input(buffer,&machine_number,product,&quantity,&current_time,error);
         
         write_to_sales_history(file_path, machine_number,product,quantity,&current_time);
-    
-        send(temp,buffer,strlen(buffer),0);
+        send(temp,RECV,strlen(RECV),0);
     } 
 }
 
@@ -67,6 +73,8 @@ int main(int argc, char** argv)
     saddr.sin_addr.s_addr = 0; 
     bind(sfd, (struct sockaddr*)&saddr, sizeof(saddr));
     listen(sfd, 10);
+    pthread_t refill_thread;
+    pthread_create(&refill_thread,NULL,thread_proc_refill,NULL);
     while (0 == 0)
     {
         int tmp = accept(sfd, (struct sockaddr*)&caddr, &clen);

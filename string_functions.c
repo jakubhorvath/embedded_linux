@@ -28,7 +28,7 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
     *current_time = *localtime(&t);
     
     char* token = strtok(input, " ");
-    char machine_file_path[] = "machineInventoryn.txt";
+    char machine_file_path[] = "machineInventory.txt";
     char n;
     int counter = 0;
     int available_amount = 0;
@@ -46,20 +46,20 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
         case 3:
             
             *quantity = atoi(token);
-            available_amount = check_amount(machine_file_path, product);
-            if (available_amount < 0){
-                strcpy(error, "Error: Product not found in inventory");
-                return 1;
-            }
-            else if (*quantity < 0 ){
-                strcpy(error, "Error: Invalid quantity provided");
-                return 1;
-            } else if (available_amount < *quantity){
-                strcpy(error, "Error: Not enough product available");
-                return 1;
-            } else{
-                return 0;
-            }
+            // available_amount = check_amount(machine_file_path, product);
+            // if (available_amount < 0){
+            //     strcpy(error, "Error: Product not found in inventory");
+            //     return 1;
+            // }
+            // else if (*quantity < 0 ){
+            //     strcpy(error, "Error: Invalid quantity provided");
+            //     return 1;
+            // } else if (available_amount < *quantity){
+            //     strcpy(error, "Error: Not enough product available");
+            //     return 1;
+            // } else{
+            //     return 0;
+            // }
             break;
         default:
             break;
