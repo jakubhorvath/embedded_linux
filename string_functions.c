@@ -2,6 +2,81 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <stdbool.h>
+
+bool isproduct(char* file_text, size_t index, char* product_name){
+    int i = 0;
+    while (file_text[index] == product_name[i]){
+        index++;
+        i++;
+        if (product_name[i] == '\0')
+            return true;
+    }
+    return false;
+}
+
+
+int machine_change_product(int machine_num, char* commodity_name, int amount){
+    char c=machine_num+'0';
+    char file_path[] = "machineInventoryn.txt";
+    file_path[16] = c;
+
+    int fd = open(file_path, O_RDWR, S_IRUSR | S_IWUSR);
+    struct stat sb;
+    if (fstat(fd, &sb) == 1){
+        perror("couldnt get filesize\n");
+    } 
+    char* file_in_memory = mmap(NULL, sb.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    printf("%s", file_in_memory);
+    for (size_t i=0; i<sb.st_size; i++){
+        if (isproduct(file_in_memory, i, commodity_name)){
+            if (amount < 10){
+                file_in_memory[i+strlen(commodity_name)+1] = '0';
+                file_in_memory[i+strlen(commodity_name)+2] = amount+'0';
+            }
+            else{
+                strncpy(file_in_memory+i+strlen(commodity_name)+1, "10", 2);
+            }
+            break;
+        }
+    }    
+}
+void main(){
+    machine_change_product(1, "pepsi", 5);
+}
+
+int machine_refill(int machine_num, char* commodity_name){
+    char c=machine_num+'0';
+    char file_path[] = "machineInventoryn.txt";
+    file_path[16] = c;
+    FILE* f = fopen(file_path, "r+");
+    if (f == NULL){
+        return 1;
+    }
+    size_t bufferLength = 255;
+    char buffer[bufferLength];
+    char* tk;
+    while(fgets(buffer, bufferLength, f)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+        tk = strtok(buffer, " ");
+        // if token and product_name are equal
+        if (!strcmp(tk, commodity_name)){
+            tk = strtok(NULL," ");
+            //fputs(commodity_name, f);
+            //fputs(tk, f);
+            fclose(f);
+            return atoi(tk);
+        }
+    }
+    
+    fclose(f);
+}
+
 
 int check_amount(char* file_path, char* product_name){
     FILE* f = fopen(file_path, "r");
@@ -11,7 +86,12 @@ int check_amount(char* file_path, char* product_name){
     size_t bufferLength = 255;
     char buffer[bufferLength];
     char* tk;
+    size_t line_num = 0;
     while(fgets(buffer, bufferLength, f)) {
+        line_num++;
+        if (line_num == 1){
+            continue;
+        }
         buffer[strcspn(buffer, "\n")] = 0;
         tk = strtok(buffer, " ");
         // if token and product_name are equal
@@ -32,7 +112,7 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
     *current_time = *localtime(&t);
     
     char* token = strtok(input, " ");
-    char machine_file_path[] = "machineInventoryn.txt";
+    char machine_file_path[] = "machineInventory.txt";
     char n;
     int counter = 0;
     int available_amount = 0;
@@ -52,14 +132,14 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
             *quantity = atoi(token);
             available_amount = check_amount(machine_file_path, product);
             if (available_amount < 0){
-                strcpy(error, "Error: Product not found in inventory\n");
+                strcpy(error, "Error: Product not found in inventory");
                 return 1;
             }
             else if (*quantity < 0 ){
-                strcpy(error, "Error: Invalid quantity provided\n");
+                strcpy(error, "Error: Invalid quantity provided");
                 return 1;
             } else if (available_amount < *quantity){
-                strcpy(error, "Error: Not enough product available\n");
+                strcpy(error, "Error: Not enough product available");
                 return 1;
             } else{
                 return 0;
