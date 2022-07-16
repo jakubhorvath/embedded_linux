@@ -18,13 +18,17 @@ int* cfd = NULL;
 int count = 0;
 char *READY = "The vending machine is ready to use\n";
 char *RECV = "The order have been received\n";
+int status = 0;
 
 void *thread_proc_refill(void* arg){
     while (0 == 0)
     {
         //We will handle the refilling function here
         printf("Refilling...\n");
-        sleep(60);
+        status = 1;
+        sleep(20);
+        status = 0;
+        sleep(40);
     }
     
 }
@@ -43,10 +47,19 @@ void *thread_proc(void* arg){
         char* error = (char*) malloc(100*sizeof(char));
         int quantity;
         struct tm current_time;
-        process_input(buffer,&machine_number,product,&quantity,&current_time,error);
-        
-        write_to_sales_history(file_path, machine_number,product,quantity,&current_time);
-        send(temp,RECV,strlen(RECV),0);
+        int value = process_input(buffer,&machine_number,product,&quantity,&current_time,error);
+        printf("%d\n",value);
+        if(value == 1){
+            send(temp,error,strlen(error),0);
+        }else
+        {
+            write_to_sales_history(file_path, machine_number,product,quantity,&current_time);
+            while(status == 1){
+                printf("On refilling process\n");
+                sleep(2);
+            }
+            send(temp,RECV,strlen(RECV),0);
+        }
     } 
 }
 

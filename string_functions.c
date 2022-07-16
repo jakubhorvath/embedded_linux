@@ -52,14 +52,14 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
             *quantity = atoi(token);
             available_amount = check_amount(machine_file_path, product);
             if (available_amount < 0){
-                strcpy(error, "Error: Product not found in inventory");
+                strcpy(error, "Error: Product not found in inventory\n");
                 return 1;
             }
             else if (*quantity < 0 ){
-                strcpy(error, "Error: Invalid quantity provided");
+                strcpy(error, "Error: Invalid quantity provided\n");
                 return 1;
             } else if (available_amount < *quantity){
-                strcpy(error, "Error: Not enough product available");
+                strcpy(error, "Error: Not enough product available\n");
                 return 1;
             } else{
                 return 0;
