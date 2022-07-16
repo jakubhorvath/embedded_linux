@@ -32,7 +32,7 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
     *current_time = *localtime(&t);
     
     char* token = strtok(input, " ");
-    char machine_file_path[] = "machineInventory.txt";
+    char machine_file_path[] = "machineInventoryn.txt";
     char n;
     int counter = 0;
     int available_amount = 0;
