@@ -1,7 +1,7 @@
 Index Product  Amount
-1     7up      10
-2     coke     10
-3     water    10
-4     cookies  10
-5     snickers 10
-6     pepsi    10
+1 7up 10
+2 coke 10
+3 water 10
+4 cookies 10
+5 snickers 10
+6 pepsi 10

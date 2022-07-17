@@ -32,7 +32,7 @@ int machine_change_product(int machine_num, char* commodity_name, int amount){
         perror("couldnt get filesize\n");
     } 
     char* file_in_memory = mmap(NULL, sb.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-    printf("%s", file_in_memory);
+    printf("%s\n", file_in_memory);
     for (size_t i=0; i<sb.st_size; i++){
         if (isproduct(file_in_memory, i, commodity_name)){
             if (amount < 10){
@@ -45,7 +45,6 @@ int machine_change_product(int machine_num, char* commodity_name, int amount){
             break;
         }
     }    
-    sleep(5);
 }
 
 void change_all(){
@@ -105,17 +104,12 @@ int check_amount(char* file_path, char* product_name){
 
 }
 
-void main(){
-    change_all();
-    //printf("%d", check_amount("machineInventory3.txt", "snickers"));
-}
-
 int process_input(char* input, int* machine_num, char* product, int* quantity, struct tm* current_time, char* error){
     time_t t = time(NULL);
     *current_time = *localtime(&t);
     
     char* token = strtok(input, " ");
-    char machine_file_path[] = "machineInventory.txt";
+    char machine_file_path[] = "machineInventoryn.txt";
     char n;
     int counter = 0;
     int available_amount = 0;
@@ -135,14 +129,14 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
             *quantity = atoi(token);
             available_amount = check_amount(machine_file_path, product);
             if (available_amount < 0){
-                strcpy(error, "Error: Product not found in inventory");
+                strcpy(error, "Error: Product not found in inventory\n");
                 return 1;
             }
             else if (*quantity < 0 ){
-                strcpy(error, "Error: Invalid quantity provided");
+                strcpy(error, "Error: Invalid quantity provided\n");
                 return 1;
             } else if (available_amount < *quantity){
-                strcpy(error, "Error: Not enough product available");
+                strcpy(error, "Error: Not enough product available\n");
                 return 1;
             } else{
                 return 0;

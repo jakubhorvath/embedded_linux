@@ -18,6 +18,7 @@ int* cfd = NULL;
 int count = 0;
 char *READY = "The vending machine is ready to use\n";
 char *RECV = "The order have been received\n";
+char *WAIT = "Please wait while refilling stock\n";
 int status = 0;
 
 void *thread_proc_refill(void* arg){
@@ -28,6 +29,8 @@ void *thread_proc_refill(void* arg){
         status = 1;
         //TODO 
         change_all();
+        printf("End refilling...\n");
+        sleep(10);
         status = 0;
         sleep(40);
     }
@@ -56,7 +59,7 @@ void *thread_proc(void* arg){
         {
             write_to_sales_history(file_path, machine_number,product,quantity,&current_time);
             while(status == 1){
-                printf("On refilling process\n");
+                send(temp,WAIT,strlen(WAIT),0);
                 sleep(2);
             }
             send(temp,RECV,strlen(RECV),0);
