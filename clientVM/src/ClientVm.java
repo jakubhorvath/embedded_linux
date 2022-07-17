@@ -115,7 +115,7 @@ public class ClientVm {
     public static List<String> getProduct(int vm) throws FileNotFoundException {
 
 
-        String url = "C:\\koolsoft\\clientVM\\src\\machineInventory" + vm + ".txt";
+        String url ="C:\\Users\\lenovo\\Downloads\\Lab01\\linux\\embedded_linux\\clientVM\\src\\machineInventory" + vm + ".txt";
         FileInputStream fileInputStream = new FileInputStream(url);
         Scanner scanner = new Scanner(fileInputStream);
         int i=0;
