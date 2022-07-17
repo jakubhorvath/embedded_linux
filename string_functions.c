@@ -139,6 +139,7 @@ int process_input(char* input, int* machine_num, char* product, int* quantity, s
                 strcpy(error, "Error: Not enough product available\n");
                 return 1;
             } else{
+                machine_change_product(*machine_num, product, available_amount-*quantity);
                 return 0;
             }
             break;
