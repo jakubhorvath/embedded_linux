@@ -30,3 +30,5 @@ int machine_change_product(int machine_num, char* commodity_name, int amount);
 /* this function opens the file at machineInventory{machine_num}.txt 
    and changes the number of commodities available to the value of amount
 */
+
+void change_all();

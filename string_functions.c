@@ -46,37 +46,33 @@ int machine_change_product(int machine_num, char* commodity_name, int amount){
         }
     }    
 }
-void main(){
-    machine_change_product(1, "pepsi", 5);
-}
 
-int machine_refill(int machine_num, char* commodity_name){
-    char c=machine_num+'0';
+void change_all(){
     char file_path[] = "machineInventoryn.txt";
-    file_path[16] = c;
-    FILE* f = fopen(file_path, "r+");
-    if (f == NULL){
-        return 1;
-    }
-    size_t bufferLength = 255;
-    char buffer[bufferLength];
-    char* tk;
-    while(fgets(buffer, bufferLength, f)) {
-        buffer[strcspn(buffer, "\n")] = 0;
-        tk = strtok(buffer, " ");
-        // if token and product_name are equal
-        if (!strcmp(tk, commodity_name)){
+    char c;
+    for (int i=1; i<4; i++){
+        c = i+'0';
+        file_path[16] = c;
+        FILE* f = fopen(file_path, "r+");
+        machine_change_product(i, "apple", 10);
+        size_t bufferLength = 255;
+        char buffer[bufferLength];
+        char* tk;
+        size_t line_num = 0;
+        while(fgets(buffer, bufferLength, f)) {
+            line_num++;
+            if (line_num == 1){
+                continue;
+            }
+            buffer[strcspn(buffer, "\n")] = 0;
+            tk = strtok(buffer, " ");
             tk = strtok(NULL," ");
-            //fputs(commodity_name, f);
-            //fputs(tk, f);
-            fclose(f);
-            return atoi(tk);
+            printf("%s\n", tk);
+            machine_change_product(i, tk, 10);
         }
     }
-    
-    fclose(f);
-}
 
+}
 
 int check_amount(char* file_path, char* product_name){
     FILE* f = fopen(file_path, "r");
@@ -94,6 +90,7 @@ int check_amount(char* file_path, char* product_name){
         }
         buffer[strcspn(buffer, "\n")] = 0;
         tk = strtok(buffer, " ");
+        tk = strtok(NULL," ");
         // if token and product_name are equal
         if (!strcmp(tk, product_name)){
             tk = strtok(NULL," ");
@@ -105,6 +102,11 @@ int check_amount(char* file_path, char* product_name){
     fclose(f);
     return -1;
 
+}
+
+void main(){
+    change_all();
+    //printf("%d", check_amount("machineInventory3.txt", "snickers"));
 }
 
 int process_input(char* input, int* machine_num, char* product, int* quantity, struct tm* current_time, char* error){

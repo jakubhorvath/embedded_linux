@@ -27,7 +27,7 @@ void *thread_proc_refill(void* arg){
         printf("Refilling...\n");
         status = 1;
         //TODO 
-        machine_change_product(which_machine???, which_product???, how_much???);
+        change_all();
         status = 0;
         sleep(40);
     }
