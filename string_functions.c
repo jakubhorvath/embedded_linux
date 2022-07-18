@@ -44,7 +44,8 @@ int machine_change_product(int machine_num, char* commodity_name, int amount){
             }
             break;
         }
-    }    
+    } 
+    sleep(1);   
 }
 
 void change_all(){

@@ -1,5 +1,5 @@
 Index Product  Amount
-1 coke 10
+1 coke 00
 2 pepsi 10
 3 water 10
 4 cookies 10
